@@ -1,0 +1,25 @@
+version: '3'
+
+networks:
+  default:
+    external:
+      name: fileserver-network
+
+services:
+  server:
+    container_name: fileserver_server
+    build: .
+    volumes:
+      - .:/code
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.envs/.local/.server
+
+  nginx:
+    container_name: fileserver_nginx
+    image: nginx:1.17.3
+    volumes:
+      - ./media/:/usr/share/nginx/html:ro
+    ports:
+      - "8080:80"
